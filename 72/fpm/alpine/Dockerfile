@@ -1,7 +1,7 @@
 FROM php:7.2-fpm-alpine
 RUN set -ex \
   && apk --no-cache add \
-    postgresql-dev \
+    libsodium-dev \
     zlib-dev \
     && apk add --update --virtual autoconf \
     && export CFLAGS="$PHP_CFLAGS" CPPFLAGS="$PHP_CPPFLAGS" LDFLAGS="$PHP_LDFLAGS"
@@ -12,7 +12,7 @@ RUN apk add --update --no-cache postgresql-dev \
 
 # intl, zip, soap
 RUN apk add --update --no-cache libintl icu icu-dev libxml2-dev \
-    && docker-php-ext-install intl zip soap
+    && docker-php-ext-install intl zip soap sodium
 
 # imagick
 RUN apk add --update --no-cache autoconf g++ imagemagick-dev libtool make pcre-dev \
@@ -22,7 +22,7 @@ RUN apk add --update --no-cache autoconf g++ imagemagick-dev libtool make pcre-d
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN sed -i -e 's/listen.*/listen = 0.0.0.0:9000/' /usr/local/etc/php-fpm.conf
+RUN sed -i -e 's/listen.*/listen = 0.0.0.0:9000/' /usr/local/etc/php-fpm.d/www.conf
 
 RUN echo "expose_php=0" > /usr/local/etc/php/php.ini
 
