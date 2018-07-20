@@ -30,6 +30,23 @@ RUN yum install -y php71 php71-devel.x86_64 \
 RUN mkdir /var/www/ssl/ && \
     openssl req -subj '/CN=flipboxdigital.com/O=Flipbox Digital/C=US' -new -newkey rsa:2048 -sha256 -days 365 -nodes -x509 -keyout /var/www/ssl/self-signed.key -out /var/www/ssl/self-signed.crt
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    #hopefully this would speed some things up
+    composer global require hirak/prestissimo
 
-CMD service httpd start && tail -f /var/log/httpd/error_log
+COPY scripts/ /usr/local/bin/
+RUN ["chmod", "+x", "-R", "/usr/local/bin"]
+
+#Configurable XDEBUG options
+ENV XDEBUG_FILE_PATH=/etc/php.d/15-xdebug.ini
+ENV XDEBUG_ON ''
+ENV XDEBUG_HOST ''
+ENV XDEBUG_PORT ''
+ENV XDEBUG_IDEKEY ''
+
+#configure your doc root
+ENV APACHE_DOCUMENT_ROOT /var/www/html
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD httpd -DFOREGROUND
