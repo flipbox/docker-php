@@ -1,6 +1,27 @@
 #!/bin/sh
 
+if [ ! -f "${APACHE_DOCUMENT_ROOT}" ]; then
+    mkdir -p $APACHE_DOCUMENT_ROOT;
+fi
+
 {
+    echo '# This configuration file enables the default "Welcome" page if there'; \
+    echo '# is no default index page present for the root URL.  To disable the'; \
+    echo '# Welcome page, comment out all the lines below.'; \
+    echo '#'; \
+    echo '# NOTE: if this file is removed, it will be restored on upgrades.'; \
+    echo '#'; \
+    echo '<LocationMatch "^/+$">'; \
+    echo '    Options -Indexes'; \
+    echo '    ErrorDocument 403 /.noindex.html'; \
+    echo '</LocationMatch>'; \
+    echo ''; \
+    echo '<Directory /var/www/noindex>'; \
+    echo '    AllowOverride None'; \
+    echo '    Require all granted'; \
+    echo '</Directory>'; \
+    echo ''; \
+    echo 'Alias /.noindex.html /var/www/noindex/flipbox-noindex.html'; \
     echo '<VirtualHost *:80>'; \
     echo '	# The ServerName directive sets the request scheme, hostname and port that'; \
     echo '	# the server uses to identify itself. This is used when creating'; \

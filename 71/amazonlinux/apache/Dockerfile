@@ -1,4 +1,4 @@
-FROM amazonlinux:latest
+FROM amazonlinux:1
 
 RUN yum install -y php71 php71-devel.x86_64 \
     php71-bcmath.x86_64 \
@@ -47,6 +47,10 @@ ENV XDEBUG_IDEKEY ''
 #configure your doc root
 ENV APACHE_DOCUMENT_ROOT /var/www/html
 
+COPY noindex.html /var/www/noindex/flipbox-noindex.html
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD httpd -DFOREGROUND
+EXPOSE 80 443
+
+CMD ["apache-foreground.sh"]

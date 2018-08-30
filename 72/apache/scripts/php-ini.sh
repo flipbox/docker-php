@@ -1,8 +1,5 @@
 #!/bin/sh
 
-## This script shouldn't run if xdebug is off
-## Always append to the existing xdebug file
-
 ## MAIN CONFIGS
 {
     #push errors to stderr
@@ -13,5 +10,5 @@
     echo 'max_input_time=300'; \
     echo 'post_max_size=110M'; \
     echo 'max_input_vars=5000'; \
-} | tee /etc/php.d/flipbox.ini
+} | tee /usr/local/etc/php/conf.d/flipbox.ini
 
