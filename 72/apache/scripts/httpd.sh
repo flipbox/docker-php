@@ -16,12 +16,14 @@ fi
     echo '    ErrorDocument 403 /.noindex.html'; \
     echo '</LocationMatch>'; \
     echo ''; \
-    echo '<Directory /var/www/noindex>'; \
+    echo '<Directory /var/www/extra>'; \
     echo '    AllowOverride None'; \
     echo '    Require all granted'; \
     echo '</Directory>'; \
     echo ''; \
-    echo 'Alias /.noindex.html /var/www/noindex/flipbox-noindex.html'; \
+    echo 'Alias /.noindex.html /var/www/extra/noindex.html'; \
+    echo '  #Built in health check'; \
+    echo 'Alias /health.html /var/www/extra/health.html'; \
     echo '<VirtualHost *:80>'; \
     echo '	# The ServerName directive sets the request scheme, hostname and port that'; \
     echo '	# the server uses to identify itself. This is used when creating'; \

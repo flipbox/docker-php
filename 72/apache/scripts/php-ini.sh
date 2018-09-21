@@ -3,6 +3,7 @@
 ## MAIN CONFIGS
 {
     #push errors to stderr
+    echo 'opcache.enable_cli=On'; \
     echo 'log_errors=On'; \
     echo 'error_log=/dev/stderr'; \
     echo 'memory_limit=256M'; \
