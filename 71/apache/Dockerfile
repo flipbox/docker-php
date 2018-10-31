@@ -7,6 +7,7 @@ RUN chmod +x -R /usr/local/bin && \
     apt-get update -y && \
     apt-get install -y \
         unzip \
+        libmcrypt-dev \
         libpq-dev \
         zlib1g-dev \
         libmagickwand-dev && \
@@ -14,9 +15,9 @@ RUN chmod +x -R /usr/local/bin && \
     a2enmod ssl && \
     a2enmod expires && \
     a2enmod rewrite && \
-    docker-php-ext-install intl pdo_pgsql pdo_mysql zip && \
+    docker-php-ext-install intl pdo_pgsql pdo_mysql zip mcrypt && \
     pecl install imagick xdebug-2.6.0alpha1 && \
-    docker-php-ext-enable imagick xdebug opcache && \
+    docker-php-ext-enable imagick xdebug opcache mcrypt && \
     pecl install -o -f redis && \
     rm -rf /tmp/pear && \
     docker-php-ext-enable redis && \
