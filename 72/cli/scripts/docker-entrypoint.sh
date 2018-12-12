@@ -17,21 +17,4 @@ if [ ! -e /var/www/ssl/self-signed.key ]; then
         openssl req -subj '/CN=flipboxdigital.com/O=Flipbox Digital/C=US' -new -newkey rsa:2048 -sha256 -days 365 -nodes -x509 -keyout /var/www/ssl/self-signed.key -out /var/www/ssl/self-signed.crt
 fi
 
-if [ -e /var/www/html/storage ]; then
-    chown www-data:www-data -R /var/www/html/storage
-fi
-
-if [ -e /var/www/html/config ]; then
-    chown www-data:www-data -R /var/www/html/config
-fi
-
-if [ -e /var/www/html/web ]; then
-    chown www-data:www-data -R /var/www/html/web
-fi
-
-# first arg is `-f` or `--some-option`
-if [ "$1" = 'apache2-foreground' ]; then
-    exec apache2-foreground
-fi
-
 exec "$@"

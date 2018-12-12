@@ -1,24 +1,17 @@
-FROM php:7.3-apache
+FROM php:7.2-cli
 
 COPY scripts/ /usr/local/bin/
-COPY health.html noindex.html /var/www/extra/
 
 RUN chmod +x -R /usr/local/bin && \
     apt-get update -y && \
     apt-get install -y \
-        unzip \
-        libpq-dev \
-        libzip-dev \
-        zlib1g-dev \
-        libmagickwand-dev && \
-    ##apache
-    a2enmod ssl && \
-    a2enmod expires && \
-    a2enmod rewrite && \
+    unzip \
+    libpq-dev \
+    zlib1g-dev \
+    libmagickwand-dev \
+    && \
     docker-php-ext-install intl pdo_pgsql pdo_mysql zip && \
-    # Check the latest xdebug
-    # https://pecl.php.net/package/Xdebug
-    pecl install imagick xdebug-2.7.0beta1 && \
+    pecl install imagick xdebug-2.6.0alpha1 && \
     docker-php-ext-enable imagick xdebug opcache sodium && \
     pecl install -o -f redis && \
     rm -rf /tmp/pear && \
@@ -35,11 +28,5 @@ ENV XDEBUG_IDEKEY ''
 
 ENV XDEBUG_FILE_PATH='/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
 
-#configure your doc root
-ENV APACHE_DOCUMENT_ROOT /var/www/html/web
-
-ENTRYPOINT ["docker-entrypoint.sh"]
-
-EXPOSE 80 443
-
-CMD ["apache2-foreground"]
+ENTRYPOINT ["docker-php-entrypoint"]
+CMD ["php", "-a"]

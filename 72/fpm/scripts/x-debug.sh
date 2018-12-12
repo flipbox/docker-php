@@ -5,7 +5,7 @@
 
 ## MAIN CONFIGS
 {
-    echo 'zend_extension=xdebug.so'; \
+    echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so'; \
     echo 'xdebug.remote_enable=1'; \
 } | tee $XDEBUG_FILE_PATH
 

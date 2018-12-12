@@ -15,7 +15,7 @@ RUN chmod +x -R /usr/local/bin && \
     a2enmod expires && \
     a2enmod rewrite && \
     docker-php-ext-install gd intl pdo_pgsql pdo_mysql zip && \
-    pecl install imagick xdebug-2.6.0alpha1 && \
+    pecl install imagick xdebug-2.7.0beta1 && \
     docker-php-ext-enable gd imagick xdebug opcache sodium && \
     pecl install -o -f redis && \
     rm -rf /tmp/pear && \
