@@ -1,3 +1,5 @@
+build70AmazonLinux:
+	docker build 70/amazonlinux/apache/ --pull -t flipbox/php:70-amazonlinux-apache
 build71AmazonLinux:
 	docker build 71/amazonlinux/apache/ --pull -t flipbox/php:71-amazonlinux-apache
 build72AmazonLinux:

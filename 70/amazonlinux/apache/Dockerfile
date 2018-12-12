@@ -1,4 +1,4 @@
-FROM amazonlinux:latest
+FROM amazonlinux:1
 
 RUN yum install -y php70 php70-devel.x86_64 \
     php70-bcmath.x86_64 \
@@ -33,4 +33,25 @@ RUN mkdir /var/www/ssl/ && \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-CMD service httpd start && tail -f /var/log/httpd/error_log
+COPY scripts/ /usr/local/bin/
+RUN ["chmod", "+x", "-R", "/usr/local/bin"]
+
+#Configurable XDEBUG options
+ENV XDEBUG_FILE_PATH=/etc/php.d/15-xdebug.ini
+ENV XDEBUG_ON ''
+ENV XDEBUG_HOST ''
+ENV XDEBUG_PORT ''
+ENV XDEBUG_IDEKEY ''
+
+#configure your doc root
+ENV APACHE_DOCUMENT_ROOT /var/www/html
+
+WORKDIR /var/www/html
+
+COPY noindex.html /var/www/noindex/flipbox-noindex.html
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+EXPOSE 80 443
+
+CMD ["apache-foreground.sh"]
