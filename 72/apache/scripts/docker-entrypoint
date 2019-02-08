@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 set -e
 
 #configure xdebug is this is set
@@ -28,6 +28,18 @@ fi
 if [ -e /var/www/html/web ]; then
     chown www-data:www-data -R /var/www/html/web
 fi
+
+# HOOKS
+shopt -s nullglob
+HOOKS=(/flipbox.d/*.sh)
+shopt -u nullglob # Turn off nullglob to make sure it doesn't interfere with anything later
+echo "${HOOKS[@]}"  # Note double-quotes to avoid extra parsing of funny characters in filenames
+
+for i in "${HOOKS[@]}"
+do
+    echo "Running shell script: ${i}"
+    bash $i
+done
 
 # first arg is `-f` or `--some-option`
 if [ "$1" = 'apache2-foreground' ]; then

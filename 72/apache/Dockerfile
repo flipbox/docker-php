@@ -9,20 +9,23 @@ RUN chmod +x -R /usr/local/bin && \
         unzip \
         libpq-dev \
         zlib1g-dev \
-        libmagickwand-dev && \
+        libmagickwand-dev \
+        libmemcached-dev && \
     ##apache
     a2enmod ssl && \
     a2enmod expires && \
     a2enmod rewrite && \
-    docker-php-ext-install gd intl pdo_pgsql pdo_mysql zip && \
-    pecl install imagick xdebug-2.7.0beta1 && \
-    docker-php-ext-enable gd imagick xdebug opcache sodium && \
-    pecl install -o -f redis && \
+    docker-php-ext-install gd intl pdo_pgsql pdo_mysql zip soap && \
+    pecl install memcached imagick xdebug-2.7.0beta1 && \
+    pecl install -o -f redis  && \
+    docker-php-ext-enable redis memcached gd imagick xdebug opcache sodium soap && \
     rm -rf /tmp/pear && \
-    docker-php-ext-enable redis && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     #hopefully this would speed some things up
-    composer global require hirak/prestissimo
+    composer global require hirak/prestissimo && \
+    # Add a hooks directory
+    mkdir /flipbox.d/
+
 
 #Configurable XDEBUG options
 ENV XDEBUG_ON ''
@@ -35,7 +38,7 @@ ENV XDEBUG_FILE_PATH='/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
 #configure your doc root
 ENV APACHE_DOCUMENT_ROOT /var/www/html/web
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["docker-entrypoint"]
 
 EXPOSE 80 443
 
