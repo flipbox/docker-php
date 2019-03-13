@@ -3,6 +3,10 @@ FROM php:7.2-apache
 COPY scripts/ /usr/local/bin/
 COPY health.html noindex.html /var/www/extra/
 
+ENV DOT_ENV_VERSION '1.1.10'
+
+ADD https://github.com/flipboxlabs/aws.env/archive/${DOT_ENV_VERSION}.zip /opt/
+
 RUN chmod +x -R /usr/local/bin && \
     apt-get update -y && \
     apt-get install -y \
@@ -24,7 +28,10 @@ RUN chmod +x -R /usr/local/bin && \
     #hopefully this would speed some things up
     composer global require hirak/prestissimo && \
     # Add a hooks directory
-    mkdir /flipbox.d/
+    mkdir /flipbox.d/ && \
+    unzip "/opt/${DOT_ENV_VERSION}.zip" -d /opt/ && \
+    export PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/" && \
+    dotenv
 
 
 #Configurable XDEBUG options
@@ -33,7 +40,13 @@ ENV XDEBUG_HOST ''
 ENV XDEBUG_PORT ''
 ENV XDEBUG_IDEKEY ''
 
-ENV XDEBUG_FILE_PATH='/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
+ENV XDEBUG_FILE_PATH '/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
+
+
+##===========================================================##
+## AWS PARAMETER STORE
+##===========================================================##
+ENV AWS_PARAMETER_PATH ''
 
 #configure your doc root
 ENV APACHE_DOCUMENT_ROOT /var/www/html/web
