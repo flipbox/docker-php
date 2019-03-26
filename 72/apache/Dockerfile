@@ -10,6 +10,7 @@ ADD https://github.com/flipboxlabs/aws.env/archive/${DOT_ENV_VERSION}.zip /opt/
 RUN chmod +x -R /usr/local/bin && \
     apt-get update -y && \
     apt-get install -y \
+        git \
         unzip \
         libpq-dev \
         zlib1g-dev \
@@ -19,7 +20,7 @@ RUN chmod +x -R /usr/local/bin && \
     a2enmod ssl && \
     a2enmod expires && \
     a2enmod rewrite && \
-    docker-php-ext-install gd intl pdo_pgsql pdo_mysql zip soap && \
+    docker-php-ext-install gd intl pdo_pgsql pdo_mysql zip soap pcntl && \
     pecl install memcached imagick xdebug-2.7.0beta1 && \
     pecl install -o -f redis  && \
     docker-php-ext-enable redis memcached gd imagick xdebug opcache sodium soap && \
