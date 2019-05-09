@@ -17,9 +17,7 @@ RUN chmod +x -R /usr/local/bin && \
         libmagickwand-dev \
         libmemcached-dev && \
     ##apache
-    a2enmod ssl && \
-    a2enmod expires && \
-    a2enmod rewrite && \
+    a2enmod ssl expires rewrite proxy proxy_http && \
     docker-php-ext-install gd intl pdo_pgsql pdo_mysql zip soap pcntl && \
     pecl install memcached imagick xdebug-2.7.0beta1 && \
     pecl install -o -f redis  && \
