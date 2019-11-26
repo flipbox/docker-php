@@ -91,4 +91,4 @@ fi
     echo '	#Include conf-available/serve-cgi-bin.conf'; \
     echo '</VirtualHost>'; \
     echo '# vim: syntax=apache ts=4 sw=4 sts=4 sr noet'; \
-} | tee /etc/apache2/sites-enabled/000-default.conf;
+} | tee /etc/apache2/sites-enabled/000-default.conf > /dev/null

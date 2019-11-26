@@ -11,5 +11,6 @@
     echo 'max_input_time=300'; \
     echo 'post_max_size=110M'; \
     echo 'max_input_vars=5000'; \
-} | tee /usr/local/etc/php/conf.d/flipbox.ini
+    echo 'max_execution_time=120'; \
+} | tee /usr/local/etc/php/conf.d/flipbox.ini > /dev/null
 

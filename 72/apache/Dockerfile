@@ -10,7 +10,9 @@ ADD https://github.com/flipboxlabs/aws.env/archive/${DOT_ENV_VERSION}.zip /opt/
 RUN chmod +x -R /usr/local/bin && \
     apt-get update -y && \
     apt-get install -y \
+        awscli \
         git \
+        jq \
         unzip \
         libpq-dev \
         zlib1g-dev \
@@ -19,7 +21,7 @@ RUN chmod +x -R /usr/local/bin && \
     ##apache
     a2enmod ssl expires rewrite proxy proxy_http && \
     docker-php-ext-install gd intl pdo_pgsql pdo_mysql zip soap pcntl && \
-    pecl install memcached imagick xdebug-2.7.0beta1 && \
+    pecl install memcached imagick xdebug && \
     pecl install -o -f redis  && \
     docker-php-ext-enable redis memcached gd imagick xdebug opcache sodium soap && \
     rm -rf /tmp/pear && \
@@ -32,6 +34,9 @@ RUN chmod +x -R /usr/local/bin && \
     export PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/" && \
     dotenv
 
+
+#Add dotenv to the path
+ENV PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/"
 
 #Configurable XDEBUG options
 ENV XDEBUG_ON ''
