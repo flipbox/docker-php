@@ -1,13 +1,6 @@
 #!/bin/sh
 set -e
 
-# first arg is `-f` or `--some-option`
-if [ "${1#-}" != "$1" ]; then
-    set -- apache2-foreground "$@"
-fi
-
-exec "$@"
-
 #configure xdebug is this is set
 if [ -n "$XDEBUG_ON" ]; then
     sh /usr/local/bin/x-debug.sh
