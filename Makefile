@@ -1,4 +1,4 @@
-VERSION=74
+VERSION=80
 
 build-apache:
 	docker build $(VERSION)/apache --pull -t flipbox/php:$(VERSION)-apache
