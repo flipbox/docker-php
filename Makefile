@@ -1,8 +1,7 @@
-VERSION=80
+VERSION=8.0
 
 build-apache:
 	docker build $(VERSION)/apache --pull -t flipbox/php:$(VERSION)-apache
-
 
 build70AmazonLinux:
 	docker build 70/amazonlinux/apache/ --pull -t flipbox/php:70-amazonlinux-apache

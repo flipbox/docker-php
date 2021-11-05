@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+function usage(){
+    cat 1>&2 <<EOF
+Usage: $SCRIPT <tag> [OPTIONS]
+
+	DESCRIPTION:
+		This pushes a local tag to a remote repository, ie: 'docker push public.ecr.aws/<ALIAS>/<TAG>'
+
+	POSITIONAL:
+		tag              Tag to push, ex: flipbox/php:80-apache
+	OPTIONS:
+		--alias|-a       AWS public profile alias
+		--profile	 AWS Profile
+		--dry-run	 Dry run
+		-h|--help	 Display help
+EOF
+}
+
+TAG=
+ALIAS=
+PROFILE=
+DRY_RUN="NO"
+while [[ $# -gt 0 ]]; do
+  key="$1"
+
+  case $key in
+    -a|--alias)
+      ALIAS="$2"
+      shift # past argument
+      shift # value
+      ;;
+    --profile)
+      PROFILE="--profile $2"
+      shift # past argument
+      shift # value
+      ;;
+    --dry-run)
+      DRY_RUN="YES"
+      shift # past argument
+      ;;
+    -h|--help)
+	usage;
+	exit 0;
+      ;;
+    *)    # unknown option
+      TAG="$1" # save it in an array for later
+      shift # past argument
+      ;;
+  esac
+done
+
+if [ -z "$TAG" ]; then 
+	echo "--tag is required"
+	usage;
+	exit 1;
+fi
+
+if [ -z "$ALIAS" ]; then 
+	echo "--alias is required"
+	usage;
+	exit 1;
+fi
+
+# login to ecr
+aws ${PROFILE} ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+docker tag $TAG public.ecr.aws/${ALIAS}/${TAG}
+docker push public.ecr.aws/${ALIAS}/${TAG}
