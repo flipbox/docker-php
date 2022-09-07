@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -e
+
+#configure xdebug is this is set
+if [ -n "$XDEBUG_ON" ]; then
+    sh /usr/local/bin/x-debug.sh
+else
+    #remove the ini if we don't want it on
+    rm -f $XDEBUG_FILE_PATH
+fi
+
+sh /usr/local/bin/php-ini.sh
+sh /usr/local/bin/httpd.sh
+
+if [ ! -e /var/www/ssl/self-signed.key ]; then
+    mkdir /var/www/ssl/ && \
+        openssl req -subj '/CN=flipboxdigital.com/O=Flipbox Digital/C=US' -new -newkey rsa:2048 -sha256 -days 365 -nodes -x509 -keyout /var/www/ssl/self-signed.key -out /var/www/ssl/self-signed.crt
+fi
+
+if [ -e /var/www/html/storage ]; then
+    chown www-data:www-data -R /var/www/html/storage
+fi
+
+if [ -e /var/www/html/config ]; then
+    chown www-data:www-data -R /var/www/html/config
+fi
+
+if [ -e /var/www/html/web ]; then
+    chown www-data:www-data -R /var/www/html/web
+fi
+
+
+##===========================================================##
+## AWS PARAMETER STORE
+##===========================================================##
+if [ ! -z "${AWS_PARAMETER_PATH}" ]; then
+    dotenv get-dotenv --path ${AWS_PARAMETER_PATH} --output export -d /etc/profile.d/dotenv
+fi
+
+##===========================================================##
+## Environmental Variables
+##===========================================================##
+## If you add environmental variables to a /etc/profile.d/ file,
+## this entrypoint will load them up here. This way you can add
+## secrets at run time or with a hook and it will be loaded into 
+## the environment
+
+shopt -s nullglob
+PROFILE_VARIABLES=(/etc/profile.d/*)
+shopt -u nullglob
+
+for f in "${PROFILE_VARIABLES[@]}"
+do
+    echo "Sourcing ${f}"
+    source $f;
+done
+
+##===========================================================##
+## Hooks with /flipbox.d/
+##===========================================================##
+## Shell files (bash with .sh extensions) within the /flipbox.d/
+## directory will be run.
+
+# Glob files
+shopt -s nullglob
+HOOKS=(/flipbox.d/*.sh)
+shopt -u nullglob
+
+# Loop thru and run
+for i in "${HOOKS[@]}"
+do
+    echo "Running shell script: ${i}"
+    bash $i
+done
+
+# first arg is `-f` or `--some-option`
+if [ "$1" = 'apache2-foreground' ]; then
+    exec apache2-foreground
+fi
+
+exec "$@"

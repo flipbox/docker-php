@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:8.1-apache
 
 COPY scripts/ /usr/local/bin/
 COPY health.html noindex.html /var/www/extra/

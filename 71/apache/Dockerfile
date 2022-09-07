@@ -20,10 +20,7 @@ RUN chmod +x -R /usr/local/bin && \
     docker-php-ext-enable imagick xdebug opcache mcrypt && \
     pecl install -o -f redis && \
     rm -rf /tmp/pear && \
-    docker-php-ext-enable redis && \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    #hopefully this would speed some things up
-    composer global require hirak/prestissimo
+    docker-php-ext-enable redis 
 
 #Configurable XDEBUG options
 ENV XDEBUG_ON ''

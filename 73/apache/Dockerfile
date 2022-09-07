@@ -28,7 +28,6 @@ RUN chmod +x -R /usr/local/bin && \
     pecl install -o -f redis  && \
     docker-php-ext-enable redis memcached gd imagick xdebug opcache sodium soap && \
     rm -rf /tmp/pear && \
-    composer global require hirak/prestissimo && \
     # Add a hooks directory
     mkdir /flipbox.d/ && \
     unzip "/opt/${DOT_ENV_VERSION}.zip" -d /opt/ && \

@@ -3,13 +3,14 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function usage(){
     cat 1>&2 <<EOF
-Usage: $SCRIPT <tag> [OPTIONS]
+Usage: $SCRIPT <tag> <version> [OPTIONS]
 
 	DESCRIPTION:
 		This pushes a local tag to a remote repository, ie: 'docker push public.ecr.aws/<ALIAS>/<TAG>'
 
 	POSITIONAL:
 		tag              Tag to push, ex: flipbox/php:80-apache
+		version          Version, matches the directory with a Dockerfile inside ($(ls -d */ | xargs | sed 's#/##g')) and should also match the tag version
 	OPTIONS:
 		--alias|-a       AWS public profile alias
 		--profile	 AWS Profile
@@ -19,7 +20,8 @@ EOF
 }
 
 TAG=
-ALIAS=
+ALIAS=l8r9s7z3
+VERSION=
 PROFILE=
 DRY_RUN="NO"
 while [[ $# -gt 0 ]]; do
@@ -47,12 +49,20 @@ while [[ $# -gt 0 ]]; do
     *)    # unknown option
       TAG="$1" # save it in an array for later
       shift # past argument
+      VERSION="$1"
+      shift
       ;;
   esac
 done
 
 if [ -z "$TAG" ]; then 
-	echo "--tag is required"
+	echo "<tag> is required (first positional argument)"
+	usage;
+	exit 1;
+fi
+
+if [ -z "$VERSION" ]; then 
+	echo "<version> is required (second positional argument)"
 	usage;
 	exit 1;
 fi
@@ -63,7 +73,24 @@ if [ -z "$ALIAS" ]; then
 	exit 1;
 fi
 
+if [ -z "$PROFILE" ]; then 
+	echo "--profile is required"
+	usage;
+	exit 1;
+fi
+
+if [ "$DRY_RUN" == "YES" ]; then
+	echo "DRY-RUN: logging into aws with: $PROFILE"
+	echo "DRY-RUN: docker buildx build \\"
+	echo "             --platform linux/amd64,linux/arm64 \\"
+	echo "             ${VERSION}/apache --pull -t public.ecr.aws/${ALIAS}/${TAG} --push"
+	exit 0;
+fi
+
 # login to ecr
 aws ${PROFILE} ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-docker tag $TAG public.ecr.aws/${ALIAS}/${TAG}
-docker push public.ecr.aws/${ALIAS}/${TAG}
+
+# build and push
+docker buildx build \
+	--platform linux/amd64,linux/arm64 \
+	${VERSION}/apache --pull -t public.ecr.aws/${ALIAS}/${TAG} --push

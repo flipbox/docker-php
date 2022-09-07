@@ -1,7 +1,14 @@
 VERSION=8.0
+TAG=flipbox/php:$(VERSION)-apache
+AWS_DEFAULT_PROFILE=flipbox
 
 build-apache:
-	docker build $(VERSION)/apache --pull -t flipbox/php:$(VERSION)-apache
+	docker buildx build \
+		--platform linux/amd64,linux/arm64 \
+		$(VERSION)/apache --pull -t $(TAG) --push
+
+build-and-push:
+	./build-push-public-aws-image $(TAG) $(VERSION) --profile $(AWS_DEFAULT_PROFILE)
 
 build70AmazonLinux:
 	docker build 70/amazonlinux/apache/ --pull -t flipbox/php:70-amazonlinux-apache
