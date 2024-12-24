@@ -3,15 +3,16 @@ FROM php:8.0-apache
 COPY scripts/ /usr/local/bin/
 COPY health.html noindex.html /var/www/extra/
 
-ENV DOT_ENV_VERSION '1.1.10'
+ENV DOT_ENV_VERSION='1.1.10'
 
 # set php.ini defaults -- override with env vars
-ENV PHP_INI_MEMORY_LIMIT '256M'
-ENV PHP_INI_UPLOAD_MAX_FILESIZE '100M'
-ENV PHP_INI_MAX_INPUT_TIME '300'
-ENV PHP_INI_POST_MAX_SIZE '110M'
-ENV PHP_INI_MAX_INPUT_VARS '5000'
-ENV PHP_INI_MAX_EXECUTION_TIME '120'
+ENV PHP_INI_MEMORY_LIMIT="256M" \
+  PHP_INI_UPLOAD_MAX_FILESIZE="100M" \
+  PHP_INI_MAX_INPUT_TIME="300" \
+  PHP_INI_POST_MAX_SIZE="110M" \
+  PHP_INI_MAX_INPUT_VARS="5000" \
+  PHP_INI_MAX_EXECUTION_TIME="120" \
+  PHP_INI_REGISTER_ARGC_ARGV="Off"
 
 ADD https://github.com/flipboxlabs/aws.env/archive/${DOT_ENV_VERSION}.zip /opt/
 
@@ -46,21 +47,21 @@ RUN chmod +x -R /usr/local/bin && \
 ENV PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/"
 
 #Configurable XDEBUG options
-ENV XDEBUG_ON ''
-ENV XDEBUG_HOST ''
-ENV XDEBUG_PORT ''
-ENV XDEBUG_IDEKEY ''
+ENV XDEBUG_ON=''
+ENV XDEBUG_HOST=''
+ENV XDEBUG_PORT=''
+ENV XDEBUG_IDEKEY=''
 
-ENV XDEBUG_FILE_PATH '/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
+ENV XDEBUG_FILE_PATH=/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 
 ##===========================================================##
 ## AWS PARAMETER STORE
 ##===========================================================##
-ENV AWS_PARAMETER_PATH ''
+ENV AWS_PARAMETER_PATH=''
 
 #configure your doc root
-ENV APACHE_DOCUMENT_ROOT /var/www/html/web
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/web
 
 ENTRYPOINT ["docker-entrypoint"]
 

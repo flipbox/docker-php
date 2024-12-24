@@ -12,5 +12,5 @@
     echo "post_max_size=${PHP_INI_POST_MAX_SIZE}"; \
     echo "max_input_vars=${PHP_INI_MAX_INPUT_VARS}"; \
     echo "max_execution_time=${PHP_INI_MAX_EXECUTION_TIME}"; \
+    echo "register_argc_argv=${PHP_INI_REGISTER_ARGC_ARGV}"; \
 } | tee /usr/local/etc/php/conf.d/flipbox.ini > /dev/null
-
