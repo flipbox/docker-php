@@ -45,7 +45,7 @@ jobs:
       - name: Build and push Web
         uses: docker/build-push-action@v6
         with:
-          context: ../../8.3/apache
+          context: 8.3/apache
           platforms: linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
