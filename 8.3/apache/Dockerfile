@@ -61,14 +61,13 @@ RUN chmod +x -R /usr/local/bin && \
         libpq-dev \
         zlib1g-dev \
         libzip-dev \
-        libmagickwand-dev \
         && \
     ##apache
     a2enmod ssl expires rewrite proxy proxy_http && \
     docker-php-ext-install gd bcmath intl pdo_pgsql pdo_mysql zip soap pcntl && \
     pecl install xdebug && \
     pecl install -o -f redis  && \
-    docker-php-ext-enable redis bcmath intl gd imagick xdebug opcache sodium soap pcntl && \
+    docker-php-ext-enable redis bcmath intl gd xdebug opcache sodium soap pcntl && \
     rm -rf /tmp/pear && \
     # Add a hooks directory
     mkdir /flipbox.d/ && \
