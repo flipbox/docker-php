@@ -3,7 +3,7 @@ FROM php:8.3-apache
 COPY scripts/ /usr/local/bin/
 COPY health.html noindex.html /var/www/extra/
 COPY php.ini /usr/local/etc/php/conf.d/flipbox.ini
-COPY httpd.con /etc/apache2/sites-enabled/000-default.conf
+COPY httpd.conf /etc/apache2/sites-enabled/000-default.conf
 
 ENV DOT_ENV_VERSION='1.1.10'
 
