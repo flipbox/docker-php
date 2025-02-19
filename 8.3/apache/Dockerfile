@@ -50,30 +50,30 @@ ENV APACHE_DOCUMENT_ROOT=${APACHE_DOCUMENT_ROOT} \
     XDEBUG_PORT='' \
     XDEBUG_IDEKEY=''
 
-RUN chmod +x -R /usr/local/bin 
-# && \
-#     apt-get update -y && \
-#     apt-get install -y \
-#         awscli \
-#         jq \
-#         git \
-#         unzip \
-#         libpq-dev \
-#         zlib1g-dev \
-#         libzip-dev 
-    #     && \
-    # ##apache
-    # a2enmod ssl expires rewrite proxy proxy_http && \
-    # docker-php-ext-install gd bcmath intl pdo_pgsql pdo_mysql zip soap pcntl && \
-    # pecl install xdebug && \
-    # pecl install -o -f redis  && \
-    # docker-php-ext-enable redis bcmath intl gd xdebug opcache sodium soap pcntl && \
-    # rm -rf /tmp/pear && \
-    # # Add a hooks directory
-    # mkdir /flipbox.d/ && \
-    # unzip "/opt/${DOT_ENV_VERSION}.zip" -d /opt/ && \
-    # export PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/" && \
-    # dotenv
+
+RUN chmod +x -R /usr/local/bin && \
+    apt-get update -y && \
+    apt-get install -y \
+        awscli \
+        jq \
+        git \
+        unzip \
+        libpq-dev \
+        zlib1g-dev \
+        libzip-dev \
+        && \
+    ##apache
+    a2enmod ssl expires rewrite proxy proxy_http && \
+    docker-php-ext-install gd bcmath intl pdo_pgsql pdo_mysql zip soap pcntl && \
+    pecl install xdebug && \
+    pecl install -o -f redis  && \
+    docker-php-ext-enable redis bcmath intl gd xdebug opcache sodium soap pcntl && \
+    rm -rf /tmp/pear && \
+    # Add a hooks directory
+    mkdir /flipbox.d/ && \
+    unzip "/opt/${DOT_ENV_VERSION}.zip" -d /opt/ && \
+    export PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/" && \
+    dotenv
 
 #Add dotenv to the path
 ENV PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/"
