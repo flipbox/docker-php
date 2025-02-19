@@ -29,7 +29,6 @@ ARG PHP_UPLOAD_MAX_FILESIZE_ARG="20M"
 ARG APACHE_DOCUMENT_ROOT=/var/www/html/web
 
 ENV APACHE_DOCUMENT_ROOT=${APACHE_DOCUMENT_ROOT} \
-    PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/" \
     PHP_MAX_EXECUTION_TIME=${PHP_MAX_EXECUTION_TIME_ARG} \
     PHP_MAX_INPUT_TIME=${PHP_MAX_INPUT_TIME} \
     PHP_MAX_INPUT_VARS=${PHP_MAX_INPUT_VARS_ARG} \
@@ -79,15 +78,6 @@ RUN chmod +x -R /usr/local/bin && \
 
 #Add dotenv to the path
 ENV PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/"
-
-#Configurable XDEBUG options
-ENV XDEBUG_ON=''
-ENV XDEBUG_HOST=''
-ENV XDEBUG_PORT=''
-ENV XDEBUG_IDEKEY=''
-
-ENV XDEBUG_FILE_PATH='/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
-
 
 ##===========================================================##
 ## AWS PARAMETER STORE
