@@ -50,17 +50,17 @@ ENV APACHE_DOCUMENT_ROOT=${APACHE_DOCUMENT_ROOT} \
     XDEBUG_PORT='' \
     XDEBUG_IDEKEY=''
 
-
-RUN chmod +x -R /usr/local/bin && \
-    apt-get update -y && \
-    apt-get install -y \
-        awscli \
-        jq \
-        git \
-        unzip \
-        libpq-dev \
-        zlib1g-dev \
-        libzip-dev 
+RUN chmod +x -R /usr/local/bin 
+# && \
+#     apt-get update -y && \
+#     apt-get install -y \
+#         awscli \
+#         jq \
+#         git \
+#         unzip \
+#         libpq-dev \
+#         zlib1g-dev \
+#         libzip-dev 
     #     && \
     # ##apache
     # a2enmod ssl expires rewrite proxy proxy_http && \
