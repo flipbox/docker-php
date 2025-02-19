@@ -70,10 +70,10 @@ RUN chmod +x -R /usr/local/bin && \
     docker-php-ext-enable redis bcmath intl gd xdebug opcache sodium soap pcntl && \
     rm -rf /tmp/pear && \
     # Add a hooks directory
-    mkdir /flipbox.d/ && \
-    unzip "/opt/${DOT_ENV_VERSION}.zip" -d /opt/ && \
-    export PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/" && \
-    dotenv
+    mkdir /flipbox.d/ 
+    # unzip "/opt/${DOT_ENV_VERSION}.zip" -d /opt/ && \
+    # export PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/" && \
+    # dotenv
 
 #Add dotenv to the path
 ENV PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/"
