@@ -60,17 +60,17 @@ RUN chmod +x -R /usr/local/bin && \
         unzip \
         libpq-dev \
         zlib1g-dev \
-        libzip-dev \
-        && \
-    ##apache
-    a2enmod ssl expires rewrite proxy proxy_http && \
-    docker-php-ext-install gd bcmath intl pdo_pgsql pdo_mysql zip soap pcntl && \
-    pecl install xdebug && \
-    pecl install -o -f redis  && \
-    docker-php-ext-enable redis bcmath intl gd xdebug opcache sodium soap pcntl && \
-    rm -rf /tmp/pear && \
-    # Add a hooks directory
-    mkdir /flipbox.d/ 
+        libzip-dev 
+    #     && \
+    # ##apache
+    # a2enmod ssl expires rewrite proxy proxy_http && \
+    # docker-php-ext-install gd bcmath intl pdo_pgsql pdo_mysql zip soap pcntl && \
+    # pecl install xdebug && \
+    # pecl install -o -f redis  && \
+    # docker-php-ext-enable redis bcmath intl gd xdebug opcache sodium soap pcntl && \
+    # rm -rf /tmp/pear && \
+    # # Add a hooks directory
+    # mkdir /flipbox.d/ && \
     # unzip "/opt/${DOT_ENV_VERSION}.zip" -d /opt/ && \
     # export PATH="${PATH}:/opt/aws.env-${DOT_ENV_VERSION}/bin/" && \
     # dotenv
