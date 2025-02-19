@@ -2,39 +2,40 @@
 set -e
 
 #configure xdebug is this is set
-if [ -n "$XDEBUG_ON" ]; then
-    sh /usr/local/bin/x-debug.sh
-else
-    #remove the ini if we don't want it on
-    rm -f $XDEBUG_FILE_PATH
-fi
+# if [ -n "$XDEBUG_ON" ]; then
+#     sh /usr/local/bin/x-debug.sh
+# else
+#     #remove the ini if we don't want it on
+#     rm -f $XDEBUG_FILE_PATH
+# fi
 
 # sh /usr/local/bin/php-ini.sh
-sh /usr/local/bin/httpd.sh
+# sh /usr/local/bin/httpd.sh
 
-if [ ! -e /var/www/ssl/self-signed.key ]; then
-    mkdir /var/www/ssl/ && \
-        openssl req -subj '/CN=flipboxdigital.com/O=Flipbox Digital/C=US' -new -newkey rsa:2048 -sha256 -days 365 -nodes -x509 -keyout /var/www/ssl/self-signed.key -out /var/www/ssl/self-signed.crt
-fi
+# if [ ! -e /var/www/ssl/self-signed.key ]; then
+#     mkdir /var/www/ssl/ && \
+#         openssl req -subj '/CN=flipboxdigital.com/O=Flipbox Digital/C=US' -new -newkey rsa:2048 -sha256 -days 365 -nodes -x509 -keyout /var/www/ssl/self-signed.key -out /var/www/ssl/self-signed.crt
+# fi
 
-if [ -e /var/www/html/storage ]; then
-    chown www-data:www-data -R /var/www/html/storage
-fi
+# if [ -e /var/www/html/storage ]; then
+#     chown www-data:www-data -R /var/www/html/storage
+# fi
+#
+# if [ -e /var/www/html/config ]; then
+#     chown www-data:www-data -R /var/www/html/config
+# fi
+#
+# if [ -e /var/www/html/web ]; then
+#     chown www-data:www-data -R /var/www/html/web
+# fi
 
-if [ -e /var/www/html/config ]; then
-    chown www-data:www-data -R /var/www/html/config
-fi
-
-if [ -e /var/www/html/web ]; then
-    chown www-data:www-data -R /var/www/html/web
-fi
-
+PROFILE_DIR=$HOME/profile.d/
 
 ##===========================================================##
 ## AWS PARAMETER STORE
 ##===========================================================##
 if [ ! -z "${AWS_PARAMETER_PATH}" ]; then
-    dotenv get-dotenv --path ${AWS_PARAMETER_PATH} --output export -d /etc/profile.d/dotenv
+    dotenv get-dotenv --path ${AWS_PARAMETER_PATH} --output export -d $PROFILE_DIR/dotenv
 fi
 
 ##===========================================================##
@@ -46,7 +47,7 @@ fi
 ## the environment
 
 shopt -s nullglob
-PROFILE_VARIABLES=(/etc/profile.d/*)
+PROFILE_VARIABLES=($PROFILE_DIR/*)
 shopt -u nullglob
 
 for f in "${PROFILE_VARIABLES[@]}"
